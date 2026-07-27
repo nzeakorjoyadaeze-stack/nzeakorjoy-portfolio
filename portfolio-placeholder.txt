@@ -1,0 +1,2 @@
+// Minimal Next.js App Router + Contentlayer portfolio scaffold (partial / simplified for brevity)
+// This is a placeholder file to indicate initial commit. Full files will be added next.
