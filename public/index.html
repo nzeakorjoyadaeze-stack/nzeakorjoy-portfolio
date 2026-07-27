@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Random Joke Generator</title>
+  <style>
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; background:#f6f8fb; margin:0; }
+    .card { background: #fff; padding: 2rem; border-radius: 12px; box-shadow: 0 6px 18px rgba(30,30,60,0.08); width: 420px; max-width: 94%; text-align: center; }
+    button { background:#2563eb; color:#fff; border:0; padding:0.6rem 1rem; border-radius:8px; cursor:pointer; font-weight:600; }
+    button:disabled { opacity:0.6; cursor:default; }
+    .joke { margin: 1.25rem 0; color:#111827; min-height:3.5rem; }
+    .meta { display:flex; gap:.5rem; justify-content:center; }
+    .small { font-size:.85rem; color:#6b7280; }
+    .actions { margin-top: .9rem; display:flex; gap:.5rem; justify-content:center; }
+  </style>
+</head>
+<body>
+  <div class="card" role="main">
+    <h2>Random Joke Generator</h2>
+    <div id="joke" class="joke small">Click "Get a Joke" to fetch a random joke.</div>
+
+    <div class="meta">
+      <div id="source" class="small">Source: icanhazdadjoke.com</div>
+    </div>
+
+    <div class="actions">
+      <button id="btn">Get a Joke</button>
+      <button id="copy" title="Copy to clipboard" style="background:#10b981">Copy</button>
+      <button id="tweet" title="Share on Twitter" style="background:#1d9bf0">Tweet</button>
+    </div>
+
+    <div id="error" class="small" style="color:#b91c1c; margin-top:.75rem; display:none;"></div>
+  </div>
+
+  <script>
+    const jokeEl = document.getElementById('joke');
+    const btn = document.getElementById('btn');
+    const copyBtn = document.getElementById('copy');
+    const tweetBtn = document.getElementById('tweet');
+    const errorEl = document.getElementById('error');
+
+    async function fetchJoke() {
+      errorEl.style.display = 'none';
+      btn.disabled = true;
+      btn.textContent = 'Loading...';
+      try {
+        // Direct call to external API
+        const res = await fetch('https://icanhazdadjoke.com/', {
+          headers: { Accept: 'application/json', 'User-Agent': 'Random-Joke-Generator (https://example.com)' }
+        });
+        if (!res.ok) throw new Error('API error: ' + res.status);
+        const data = await res.json();
+        const text = data?.joke || 'No joke found.';
+        jokeEl.textContent = text;
+      } catch (err) {
+        // Show friendly message and keep original hint about fallback
+        jokeEl.textContent = 'Could not fetch a joke right now.';
+        errorEl.style.display = 'block';
+        errorEl.textContent = err.message || String(err);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Get a Joke';
+      }
+    }
+
+    btn.addEventListener('click', fetchJoke);
+
+    copyBtn.addEventListener('click', async () => {
+      const text = jokeEl.textContent || '';
+      if (!text) return;
+      try {
+        await navigator.clipboard.writeText(text);
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => copyBtn.textContent = 'Copy', 1200);
+      } catch {
+        copyBtn.textContent = 'Failed';
+        setTimeout(() => copyBtn.textContent = 'Copy', 1200);
+      }
+    });
+
+    tweetBtn.addEventListener('click', () => {
+      const text = jokeEl.textContent || '';
+      if (!text) return;
+      const url = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text);
+      window.open(url, '_blank', 'noopener');
+    });
+
+    // Optionally fetch on load:
+    // fetchJoke();
+  </script>
+</body>
+</html>
