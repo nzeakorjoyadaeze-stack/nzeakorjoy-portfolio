@@ -12,7 +12,7 @@
     "next": "^14.0.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "contentlayer": "^0.10.0",
-    "@contentlayer/source-files": "^0.10.0"
+    "contentlayer": "^0.3.4",
+    "@contentlayer/source-files": "^0.3.4"
   }
 }
