@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { allProjects } from 'contentlayer/generated'
+import { allProjects } from 'contentlayer2/generated'
 
 export default function Home() {
   const projects = allProjects.slice(0,3)
