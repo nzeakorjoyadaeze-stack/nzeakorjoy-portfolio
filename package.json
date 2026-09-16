@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "contentlayer build && next build",
+    "build": "contentlayer2 build && next build",
     "start": "next start",
-    "postinstall": "contentlayer build"
+    "postinstall": "contentlayer2 build"
   },
   "dependencies": {
     "next": "^14.0.0",
