@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "contentlayer2/generated": ["./.contentlayer/generated"]
+    }
+  }
+}
